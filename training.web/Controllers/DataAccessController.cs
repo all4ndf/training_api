@@ -26,7 +26,7 @@ namespace training.web.Controllers
             x.MobileNo = data.MobileNo == null ? "" : data.MobileNo.Value;
             x.AddedBy = "comlogik";
             x.DateAdded = DateTime.Now;
-            x.UpdatedBy = "xxxxxxxxx";
+           
 
             TransactionStatus stat = repo.SavePatientInformation(x);
 
