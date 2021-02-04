@@ -147,6 +147,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblChargeDetails.cs" />
+    <Compile Include="Models\tblChargeMain.cs" />
+    <Compile Include="Models\tblGeneralLedgerDetails.cs" />
+    <Compile Include="Models\tblGeneralLedgerMain.cs" />
     <Compile Include="Models\tblUsers.cs" />
     <Compile Include="Models\TransactionStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

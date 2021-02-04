@@ -10,5 +10,6 @@ namespace training.web.Repositories
     interface IRepo
     {
         TransactionStatus SavePatientInformation(tblUsers x);
+        TransactionStatus SaveCharge(tblChargeMain x, List<tblChargeDetails> addedCharges);
     }
 }
