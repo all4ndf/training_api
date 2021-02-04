@@ -98,7 +98,7 @@ namespace training.web.Repositories
 
 
                     Guid Id  = Guid.NewGuid();
-                    conn.Execute("udp_SaveCharge",new
+                 var result=   conn.ExecuteScalar("udp_SaveCharge",new
                     {
                         Id=Id,
                         DeptCode = x.DeptCode,
@@ -125,7 +125,8 @@ namespace training.web.Repositories
 
 
                     stat.status = 1;
-                    stat.message = "Successfully saved!";
+                    stat.message =result.ToString();
+                    
 
 
 
