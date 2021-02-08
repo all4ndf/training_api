@@ -22,15 +22,20 @@ namespace training.web.Controllers
         {
 
             tblUsers x =new tblUsers();
+            x.Id = data.Id == null ? Guid.Empty : new Guid(data.Id.Value.ToString());
             x.Username =  data.Username == null ? "" : data.Username.Value;
             x.Fullname = data.Fullname == null ? "" : data.Fullname.Value;
             x.EmailAddress = data.EmailAddress == null ? "" : data.EmailAddress.Value;
             x.MobileNo = data.MobileNo == null ? "" : data.MobileNo.Value;
             x.AddedBy = "comlogik";
             x.DateAdded = DateTime.Now;
-           
+            TransactionStatus stat = new TransactionStatus();
 
-            TransactionStatus stat = repo.SavePatientInformation(x);
+
+          
+                stat = repo.SavePatientInformation(x);
+            
+       
 
             
 
@@ -96,6 +101,56 @@ namespace training.web.Controllers
         }
 
 
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("api/getlistofusers")]
+
+        public HttpResponseMessage GetListOfUsers() {
+
+            var queryItems = Request.RequestUri.ParseQueryString();
+
+
+            TransactionStatus stat = new TransactionStatus();
+            string username = queryItems["UserName"] == null ? "" : queryItems["UserName"];
+            string fullName = queryItems["FullName"] == null ? "" : queryItems["FullName"];
+        
+
+
+
+            List<Object> lst = new List<Object>();
+            stat = repo.GetListOfUsers(ref lst, username,fullName);
+
+            return Request.CreateResponse(HttpStatusCode.OK, lst);
+
+
+        }
+
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("api/getuserdetails")]
+
+        public HttpResponseMessage GetUserDetails()
+        {
+
+            var queryItems = Request.RequestUri.ParseQueryString();
+
+
+            TransactionStatus stat = new TransactionStatus();
+            string Id = queryItems["Id"] == null ? "" : queryItems["Id"];
+
+
+
+
+
+            Object u = null;
+            stat = repo.GetUserDetails(ref u, Id);
+
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, u);
+
+
+        }
 
     }
 }

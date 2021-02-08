@@ -11,5 +11,7 @@ namespace training.web.Repositories
     {
         TransactionStatus SavePatientInformation(tblUsers x);
         TransactionStatus SaveCharge(tblChargeMain x, List<tblChargeDetails> addedCharges);
+        TransactionStatus GetListOfUsers(ref List<Object> lst, string username, string fullName);
+        TransactionStatus GetUserDetails(ref Object u, string Id);
     }
 }
