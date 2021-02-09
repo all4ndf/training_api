@@ -155,7 +155,11 @@ namespace training.web.Repositories
 
                     stat.status = 1;
                     stat.message =result.ToString();
-                    
+                    stat.param = new
+                    {
+                        Id = Id
+                    };
+
 
 
 

@@ -93,7 +93,8 @@ namespace training.web.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, new
             {
                 stat = stat.status,
-                message = stat.message
+                message = stat.message,
+                param=stat.param
             });
 
 

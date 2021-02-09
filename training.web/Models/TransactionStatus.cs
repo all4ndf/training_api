@@ -11,5 +11,6 @@ namespace training.web.Models
         //0-1
         public int status { get; set; }
         public string message { get; set; }
+        public object param { get; set; }
     }
 }
