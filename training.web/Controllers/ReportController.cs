@@ -33,16 +33,46 @@ namespace training.web.Controllers
             bool excel = queryItems["isExcel"] == null ? false : Convert.ToBoolean(queryItems["isExcel"]);
 
 
+            ReportDocument rd = InitializeReport(reportName);
+   
+            IHttpActionResult response = null;
+            if (reportName == "chargeslip2.rpt")
+            {
+                rd.SetParameterValue("@Id", "{" + param1 + "}");
+                rd.SetParameterValue("@Id", "{" + param1 + "}","chargedetails");
+                rd.SetParameterValue("testParameter", "sdfsfsdf");
+                
+            }
+            Stream stream = rd.ExportToStream(!excel ? CrystalDecisions.Shared.ExportFormatType.PortableDocFormat : CrystalDecisions.Shared.ExportFormatType.Excel);
 
+            MemoryStream ms = new MemoryStream();
 
+            stream.CopyTo(ms);
+            rd.Close();
+            rd.Dispose();
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(ms.GetBuffer())
+            };
+            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "test.pdf"
+            };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+            response = ResponseMessage(result);
+            return response;
+
+        }
+
+        private ReportDocument InitializeReport(string reportName)
+        {
             string serverName = ConfigurationManager.AppSettings["serverName"];
             string databaseName = ConfigurationManager.AppSettings["databaseName"];
-
-            ReportDocument rd = new ReportDocument();
-
             string username = "training";
             string password = "training";
-
+            ReportDocument rd = new ReportDocument();
             rd.Load(HttpContext.Current.Server.MapPath("~/reports/" + reportName));
             ConnectionInfo connectInfo = new ConnectionInfo()
             {
@@ -86,7 +116,7 @@ namespace training.web.Controllers
                 {
                     if (crReportObject.Kind == ReportObjectKind.SubreportObject)
                     {
-                        crSubreportObject = (SubreportObject) crReportObject;
+                        crSubreportObject = (SubreportObject)crReportObject;
                         //open the subreport object and logon as for the general report 
                         crSubreportDocument = crSubreportObject.OpenSubreport(crSubreportObject.SubreportName);
                         crDatabase = crSubreportDocument.Database;
@@ -103,38 +133,9 @@ namespace training.web.Controllers
 
 
             }
-   
-            IHttpActionResult response = null;
-            if (reportName == "chargeslip2.rpt")
-            {
-                rd.SetParameterValue("@Id", "{" + param1 + "}");
-                rd.SetParameterValue("@Id", "{" + param1 + "}","chargedetails");
-                rd.SetParameterValue("testParameter", "sdfsfsdf");
-                
-            }
-            Stream stream = rd.ExportToStream(!excel ? CrystalDecisions.Shared.ExportFormatType.PortableDocFormat : CrystalDecisions.Shared.ExportFormatType.Excel);
 
-            MemoryStream ms = new MemoryStream();
-
-            stream.CopyTo(ms);
-            rd.Close();
-            rd.Dispose();
-
-            var result = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(ms.GetBuffer())
-            };
-            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-            {
-                FileName = "test.pdf"
-            };
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-            response = ResponseMessage(result);
-            return response;
-
+            return rd;
         }
-
 
     }
 }
